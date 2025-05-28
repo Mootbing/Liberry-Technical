@@ -1,0 +1,14 @@
+{
+  "name": "MacBook Air 15-inch (M2, 2023)",
+  "display": "15.3-inch Liquid Retina",
+  "chip": "Apple M2",
+  "cpu": "8-core CPU",
+  "gpu": "10-core GPU",
+  "memory": "8GB unified memory",
+  "storage": "256GB SSD",
+  "battery": "Up to 18 hours",
+  "weight": "3.3 pounds",
+  "ports": ["2x Thunderbolt 4", "MagSafe 3"],
+  "price": "$1299",
+  "image": "/data/macbookair.webp"
+} 

@@ -1,0 +1,14 @@
+{
+  "name": "MacBook Pro 14-inch (M3, 2023)",
+  "display": "14.2-inch Liquid Retina XDR",
+  "chip": "Apple M3",
+  "cpu": "8-core CPU",
+  "gpu": "10-core GPU",
+  "memory": "16GB unified memory",
+  "storage": "512GB SSD",
+  "battery": "Up to 18 hours",
+  "weight": "3.5 pounds",
+  "ports": ["3x Thunderbolt 4", "HDMI", "SDXC card slot", "MagSafe 3"],
+  "price": "$1999",
+  "image": "/data/macbookpro.png"
+} 
