@@ -28,7 +28,6 @@ function App() {
   );
 }
 
-// Placeholder for the comparison page, will implement next
 function ComparisonPage() {
   const [pro, setPro] = useState(null);
   const [air, setAir] = useState(null);
@@ -49,59 +48,42 @@ function ComparisonPage() {
   if (error) return <div>{error}</div>;
   if (!pro || !air) return <div>Loading...</div>;
 
-  // List of keys to compare
   const keys = [
     'display', 'chip', 'cpu', 'gpu', 'memory', 'storage', 'battery', 'weight', 'ports', 'price'
   ];
 
-  // Helper to compare values and highlight
-  function compare(key) {
-    const proVal = pro[key];
-    const airVal = air[key];
-    if (Array.isArray(proVal) && Array.isArray(airVal)) {
-      // Compare arrays (e.g., ports)
-      const proSet = new Set(proVal);
-      const airSet = new Set(airVal);
-      const proExtra = proVal.filter(x => !airSet.has(x));
-      const airExtra = airVal.filter(x => !proSet.has(x));
-      return (
-        <>
-          <span style={{ color: proExtra.length ? 'green' : undefined }}>{proVal.join(', ')}</span>
-          {' | '}
-          <span style={{ color: airExtra.length ? 'green' : undefined }}>{airVal.join(', ')}</span>
-        </>
-      );
-    }
-    if (proVal === airVal) {
-      return <span>{proVal}</span>;
-    }
-    // Simple logic: for price, lower is better; for weight, lower is better; for memory/storage, higher is better
-    let proStyle = {}, airStyle = {};
+  function getCellStyle(key, proVal, airVal, isPro) {
+    // price, lower is better
+    // weight, lower is better
+    // memory/storage, higher is better
+    let style = {};
+    if (proVal === airVal) return style;
     if (key === 'price') {
       const proNum = Number(proVal.replace(/[^\d.]/g, ''));
       const airNum = Number(airVal.replace(/[^\d.]/g, ''));
-      if (proNum < airNum) { proStyle.color = 'green'; airStyle.color = 'red'; }
-      else { proStyle.color = 'red'; airStyle.color = 'green'; }
+      if (proNum < airNum) style.color = isPro ? 'green' : 'red';
+      else style.color = isPro ? 'red' : 'green';
     } else if (key === 'weight') {
       const proNum = Number(proVal);
       const airNum = Number(airVal);
-      if (proNum < airNum) { proStyle.color = 'green'; airStyle.color = 'red'; }
-      else { proStyle.color = 'red'; airStyle.color = 'green'; }
-    } else if (['memory', 'storage'].includes(key)) {
+      if (proNum < airNum) style.color = isPro ? 'green' : 'red';
+      else style.color = isPro ? 'red' : 'green';
+    } else if (["memory", "storage"].includes(key)) {
       const proNum = Number(proVal);
       const airNum = Number(airVal);
-      if (proNum > airNum) { proStyle.color = 'green'; airStyle.color = 'red'; }
-      else { proStyle.color = 'red'; airStyle.color = 'green'; }
+      if (proNum > airNum) style.color = isPro ? 'green' : 'red';
+      else style.color = isPro ? 'red' : 'green';
     } else {
-      // For other fields, just highlight if different
-      proStyle.color = 'green';
-      airStyle.color = 'red';
+      style.color = isPro ? 'green' : 'red';
     }
-    return (
-      <>
-        <span style={proStyle}>{proVal}</span> {' | '} <span style={airStyle}>{airVal}</span>
-      </>
-    );
+    return style;
+  }
+
+  function renderValue(key, value) {
+    if (Array.isArray(value)) {
+      return value.join(', ');
+    }
+    return value;
   }
 
   return (
@@ -125,7 +107,8 @@ function ComparisonPage() {
           {keys.map(key => (
             <tr key={key}>
               <td style={{ fontWeight: 'bold' }}>{key.charAt(0).toUpperCase() + key.slice(1)}</td>
-              <td colSpan={2}>{compare(key)}</td>
+              <td style={getCellStyle(key, pro[key], air[key], true)}>{renderValue(key, pro[key])}</td>
+              <td style={getCellStyle(key, pro[key], air[key], false)}>{renderValue(key, air[key])}</td>
             </tr>
           ))}
         </tbody>
